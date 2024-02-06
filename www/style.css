@@ -1,0 +1,65 @@
+
+body {
+  font-family: system-ui;
+  background: #121212;
+  color: white;
+  text-align: center;
+}
+p {
+  color: #8b8b8b;
+}
+ul {
+  list-style-type: none;
+  color: #8b8b8b;
+}
+h2 {
+  margin-bottom: 0px;
+}
+.header {
+  border-bottom: 1px solid;
+  border-color: #8b8b8b;
+  width: 75%;
+  margin: auto;
+  text-align: center;
+}
+.rooms {
+  margin: 5%;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1%;
+  grid-auto-rows: 200px;
+}
+.rowElement {
+  border-radius: 25px;
+  border: 2px solid;
+  border-color: #282828;
+  background-color: #282828;
+  text-align: left;
+  padding-left: 10%;
+  transition: 0.3s;
+}
+.rowElement:hover {
+  border-color: white;
+}
+.capacity {
+  text-align: right;
+  margin-right: 10%;
+  color: white;
+}
+.newRoom{
+  border-radius: 25px;
+  border: 1px solid;
+  border-color: white;
+  transition: 0.3s;
+}
+.newRoom:hover{
+  background-color: white;
+  color: #121212;
+}
+.newRoom h1 {
+  margin: 0px;
+  padding: 0px;
+  font-size: 5em;
+  text-align: center;
+}
+  

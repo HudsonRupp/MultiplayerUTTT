@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"main/dto"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -27,8 +28,43 @@ func main() {
 		roomId := uuid.MustParse("524e40f9-f5c1-48c2-8d65-0151c54d503c")
 		serveWS(c, roomId, hub)
 	})
+	r.Use(corsMiddleware())
+
+	r.GET("/rooms", func(c *gin.Context) {
+		resp := []dto.RoomInfoResponse{}
+		for room := range hub.Rooms {
+			resp = append(resp, dto.RoomInfoResponse{
+				Name:      room.Id.String(),
+				Id:        room.Id,
+				Occupants: len(room.Clients),
+				Capacity:  2,
+				Status:    "tbd",
+			})
+		}
+		c.JSON(200, resp)
+	})
 
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+}
+
+func corsMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(200)
+			return
+		}
+	}
+}
+
+func getRooms(c *gin.Context, hub *Hub) {
+	rooms := map[string]int{}
+	for room := range hub.Rooms {
+		rooms[room.Id.String()] = len(room.Clients)
+	}
+	c.JSON(200, rooms)
 }
 
 var upgrader = websocket.Upgrader{
@@ -46,13 +82,9 @@ func serveWS(c *gin.Context, roomId uuid.UUID, hub *Hub) {
 		return
 	}
 
-	log.Println("Upgraded connection")
-
 	var client *Client
 
-	log.Println("roomid Inp" + roomId.String())
 	room := getRoom(hub, roomId)
-	log.Println("roomid out" + room.Id.String())
 
 	client = NewClient(1, room, ws)
 	addClient(client, room)
