@@ -1,4 +1,4 @@
-package dto
+package httpDto
 
 import (
 	"github.com/google/uuid"

@@ -6,27 +6,20 @@ function sendWs() {
     socket.send(a)
 }
 
-function connectNewRoom() {
-    socket = new WebSocket("ws://localhost:8080/ws")
-
-    socket.addEventListener("open", (event) => {
-        console.log(event)
-    });
-    
-    socket.addEventListener("message", (event) => {
-        console.log(atob(event.data))
-    })
+function connectNewRoom(roomId) {
+    if (!roomId) {
+        roomId = "00000000-0000-0000-0000-000000000000"
+    }
+    window.location.href = "/game?roomId=" + roomId
 }
 
 function getRooms() {
     $.ajax({
-        url : 'http://localhost:8080/rooms',
+        url : 'http://localhost:8000/rooms',
         type: 'GET',
         success : function(data) {
             console.log(data)
-            if (data.length != 0) {
-                setHtml(data)
-            }
+            setHtml(data)
             if(!socket) {
                 setTimeout(getRooms, 3000);
             }
@@ -66,9 +59,8 @@ demoData = `[
 function setHtml(data) {
     var string = ""
     for (var room in data) {
-        console.log(data[room])
         string +=`
-      <div class="rowElement">
+      <div class="rowElement" onclick="connectNewRoom('`+ data[room].id + `')">
         <h2>`+data[room].name+`</h2>
         <ul>
           <li>`+data[room].id+`</li>

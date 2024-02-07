@@ -1,4 +1,4 @@
-package dto
+package wsDto
 
 type MoveRequest struct {
 	X      int `json:"Xcord"`

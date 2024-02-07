@@ -1,4 +1,4 @@
-package main
+package ws
 
 import (
 	"log"
@@ -21,17 +21,26 @@ type Client struct {
 	Room *Room
 
 	Conn *websocket.Conn
-
 	//outbound messages
-	Send chan []byte
+	Send chan OutgoingMessage
 }
 
 func NewClient(player int, room *Room, ws *websocket.Conn) *Client {
 	return &Client{Player: player,
 		Room: room,
 		Conn: ws,
-		Send: make(chan []byte),
+		Send: make(chan OutgoingMessage),
 	}
+}
+
+type IncomingMessage struct {
+	MessageType string `json:"messageType"`
+	Sender      *Client
+	Content     string `json:"content"`
+}
+type OutgoingMessage struct {
+	MessageType string `json:"messageType"`
+	Content     string `json:"content"`
 }
 
 func (c *Client) Read() {
@@ -45,17 +54,16 @@ func (c *Client) Read() {
 	c.Conn.SetPongHandler(func(string) error { c.Conn.SetReadDeadline(time.Now().Add(pongWait)); return nil })
 	for {
 
-		//var msg dto.MoveRequest
-		_, message, err := c.Conn.ReadMessage()
+		var msg IncomingMessage
+		err := c.Conn.ReadJSON(&msg)
 		if err != nil {
 			log.Println(err.Error())
 			log.Println("Closing socket")
 			c.Conn.WriteMessage(websocket.CloseMessage, []byte{})
 			return
 		}
-		//msg.Player = c.Player
-		log.Println(string(message))
-		c.Room.Recv <- message
+		msg.Sender = c
+		c.Room.Recv <- msg
 	}
 }
 
