@@ -1,0 +1,61 @@
+body {
+    font-family: system-ui;
+    background: #121212;
+    color: white;
+    text-align: center;
+    height: 100%;
+  }
+  .header {
+    border-color: #282828;
+    border-bottom: 1px solid;
+    width: 75%;
+    margin: auto;
+  }
+  .header p {
+    
+    font-size: .75em;
+  }
+  .main {
+    margin: auto;
+  }
+  
+  #board { 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+  } 
+  
+  .top {
+    border-top: unset;
+  }
+  #board {
+    margin-top: 3%;
+    color: white;
+    display: flex;
+  }
+  .row { 
+      display: flex; 
+  } 
+  .innerRow {
+      display: flex;
+      height: 33%;
+  }
+  .square {
+    border: 1px solid;
+    width: 300px;
+    height: 300px;
+  }
+  .innerSquare {
+    font-size: 4em;
+    border: 1px dashed;
+    border-color: #282828;
+    width: 33%;
+  }
+  .innerSquare p {
+    font-size: 4em;
+    color: white;
+    top: 50%;
+    left: 50%;
+    position: fixed;
+  }
+  

@@ -12,16 +12,16 @@
       crossorigin="anonymous"></script>
   </head>
   <body>
-    <div class="header">
-      <h1 id="name"></h1>
-      <p id="status"></p>
-      <p id="capacity"></p>
-      <p id="error"></p>
+    <div class="main">
+      <div class="header">
+        <h1 id="name">Name</h1>
+        <span><span id="status">Status</span>,<span id="capacity">Capacity</span>,<span id="error">Error</span></p>
+      </div>
+      <div id="board">
+     
+      </div>
+      <button onclick="makeBoard()">Leave Room</button>
     </div>
-    <div class="board">
-
-    </div>
-    <button onclick="leaveRoom()"></button>
 	<script src="./assets/js/game.js"></script>
   </body>
 </html>
