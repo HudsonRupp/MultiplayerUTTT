@@ -21,7 +21,7 @@ function getRooms() {
             console.log(data)
             setHtml(data)
             if(!socket) {
-                setTimeout(getRooms, 3000);
+                setTimeout(getRooms, 500);
             }
         },
         cors: true,
@@ -31,30 +31,6 @@ function getRooms() {
         }
     });
 }
-
-demoData = `[
-    {
-        "name": "Room1",
-        "id": "uuid-uuid-uuid-uuid",
-        "occupants": 1,
-        "capacity": 2,
-        "status": "Waiting to start"
-    },
-    {
-        "name": "Room2",
-        "id": "uuid-uuid-uuid-uuid",
-        "occupants": 2,
-        "capacity": 2,
-        "status": "In Progress"
-    },
-    {
-        "name": "Room3",
-        "id": "uuid-uuid-uuid-uuid",
-        "occupants": 1,
-        "capacity": 2,
-        "status": "Finished"
-    }
-]`
 
 function setHtml(data) {
     var string = ""

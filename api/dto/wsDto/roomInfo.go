@@ -5,10 +5,14 @@ import (
 )
 
 type RoomInfo struct {
-	Id        uuid.UUID `json:"id"`
-	Name      string    `json:"name"`
-	Status    string    `json:"status"`
-	Occupants int       `json:"occupants"`
-	Capacity  int       `json:"capacity"`
-	Board     [][]int   `json:"board"`
+	Id   uuid.UUID `json:"id"`
+	Name string    `json:"name"`
+
+	Board       [][]int  `json:"board"`
+	MetaBoard   [][]int  `json:"metaBoard"`
+	AllowedMove [][]bool `json:"allowedMove"`
+	GameStatus  int      `json:"gameStatus"`
+
+	Occupants int `json:"occupants"`
+	Capacity  int `json:"capacity"`
 }

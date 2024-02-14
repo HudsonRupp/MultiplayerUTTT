@@ -15,10 +15,12 @@ socket.addEventListener("message", (event) => {
     switch(data.messageType) {
         case "RoomInfo":
             updateRoom(data.content)
+        case "error":
+            //do something
     }
 })
 
-function sendWs() {
+function sendWs(message) {
     a = document.getElementById("msg").value
     console.log("sending message " + a)
     socket.send(a)
@@ -30,22 +32,62 @@ function updateRoom(info) {
 
     document.getElementById("name").innerHTML = roomInfo.name
     document.getElementById("capacity").innerHTML = roomInfo.occupants + "/" + roomInfo.capacity
-    document.getElementById("status").innerHTML = roomInfo.status
+    document.getElementById("status").innerHTML = roomInfo.gameStatus
+
+    if (roomInfo.gameStatus != 0) {
+        console.log("game over")
+    }
+    updateBoard(roomInfo.board, roomInfo.metaBoard, roomInfo.allowedMove)
+
 }
 
 function makeMove(i, j) {
-    //send ws
+    moveReq = {
+        "x": i,
+        "y": j,
+    }
+    req = {
+        "messageType": "move",
+        "content": JSON.stringify(moveReq),
+    }
 
-    changeSquare(i, j, "X")
+    console.log(req)
 
-    console.log(i, j)
+    socket.send(JSON.stringify(req))
 }
 
-function checkSquare() {
-    
+function updateBoard(newBoard, metaBoard, nextMove) {
+    for (var i = 0; i < 9; i++) {
+        for (var j=0; j < 9; j++) {
+            cSquare = getSquare(i, j)
+            if (newBoard[i][j] == 1) {
+                cSquare.innerHTML = "X"
+            } else if (newBoard[i][j] == 2) {
+                cSquare.innerHTML = "O"
+            }
+
+            var newColor = "#121212"
+            allowed = nextMove[Math.floor(i/3)][Math.floor(j/3)]
+            if (allowed) {
+                newColor = 'green'
+            }
+
+            var newColor
+            meta = metaBoard[Math.floor(i/3)][Math.floor(j/3)]
+            if (meta == 1) {
+                newColor = 'red'
+            } else if (meta == 2) {
+                newColor = 'blue'
+            } 
+
+            cSquare.style.background = newColor
+
+        }
+    }
+
 }
 
-function changeSquare(i, j, html) {
+function getSquare(i, j) {
     outI = Math.floor(i / 3)
     outJ = Math.floor(j / 3)
     inI = i % 3
@@ -56,7 +98,7 @@ function changeSquare(i, j, html) {
         var rowNodes = childNodes[k].childNodes
         for (var i = 0; i < rowNodes.length; i++) {
             if (rowNodes[i].id == innerId) {
-                rowNodes[i].innerHTML = html
+                return rowNodes[i]
             }
         }
     }

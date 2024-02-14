@@ -15,7 +15,7 @@ const (
 )
 
 type Client struct {
-	// 0 or 1 (for managing turns)
+	// 1 or 2 (for managing turns)
 	Player int
 
 	Room *Room

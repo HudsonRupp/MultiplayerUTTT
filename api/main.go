@@ -48,12 +48,18 @@ func main() {
 	r.GET("/rooms", func(c *gin.Context) {
 		resp := []httpDto.RoomInfoResponse{}
 		for room := range hub.Rooms {
+			var status string
+			if room.GameStatus == 0 {
+				status = "In progress"
+			} else {
+				status = "Game over"
+			}
 			resp = append(resp, httpDto.RoomInfoResponse{
 				Name:      room.Name,
 				Id:        room.Id,
 				Occupants: len(room.Clients),
 				Capacity:  2,
-				Status:    room.Status,
+				Status:    status,
 			})
 		}
 		c.JSON(200, resp)

@@ -1,7 +1,6 @@
 package wsDto
 
 type MoveRequest struct {
-	X      int `json:"Xcord"`
-	Y      int `json:"Ycord"`
-	Player int
+	X int `json:"x"`
+	Y int `json:"y"`
 }
